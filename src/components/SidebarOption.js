@@ -1,18 +1,24 @@
 import React from "react";
 import styled from "styled-components";
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
 
-function SidebarOption({ Icon, title, addChannelOption }) {
+function SidebarOption({ Icon, title, addChannelOption, id }) {
+  const addChannel = async () => {
+    const channelName = prompt("Please enter the channel name");
 
-    const addChannel = () => {
-
+    if (channelName) {
+      const docRef = await addDoc(collection(db, "channels"), {
+        name: channelName,
+      });
+      console.log("Document written with ID: ", docRef.id);
     }
+  };
 
-    const selectChannel = () => {
-        
-    }
+  const selectChannel = () => {};
   return (
     <SidebarOptionContainer
-        onClick={addChannelOption ? addChannel : selectChannel}
+      onClick={addChannelOption ? addChannel : selectChannel}
     >
       {Icon && (
         <Icon
@@ -43,18 +49,20 @@ const SidebarOptionContainer = styled.div`
   cursor: pointer;
 
   :hover {
-      opacity: 0.9;
-      background-color: #340e36;
+    opacity: 0.9;
+    background-color: #340e36;
   }
 
   > h3 {
-      font-weight: 500;
+    font-weight: 500;
   }
 
   > h3 > span {
-      padding: 15px;
+    padding: 15px;
   }
-
 `;
 
-const SidebarOptionChannel = styled.div``;
+const SidebarOptionChannel = styled.h3`
+  padding: 10px 0;
+  font-weight: 300;
+`;

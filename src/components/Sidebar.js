@@ -14,9 +14,13 @@ import FileCopyIcon from "@material-ui/icons/FileCopy";
 import ExpandLessIcon from "@material-ui/icons/ExpandLess";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import AddIcon from "@material-ui/icons/Add";
-
+import { collection } from "firebase/firestore";
+import { useCollection } from "react-firebase-hooks/firestore";
+import { db } from "../firebase";
 
 function Sidebar() {
+  const [channels, loading, error] = useCollection(collection(db, "channels"));
+
   return (
     <SidebarContainer>
       <SidebarHeader>
@@ -39,11 +43,14 @@ function Sidebar() {
       <SidebarOption Icon={FileCopyIcon} title="File browser" />
       <SidebarOption Icon={ExpandLessIcon} title="Show less" />
 
-    <hr />
-    <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
-    <hr />
-    <SidebarOption Icon={AddIcon} addChannelOption title="Add Channel" />
-
+      <hr />
+      <SidebarOption Icon={ExpandMoreIcon} title="Channels" />
+      <hr />
+      <SidebarOption Icon={AddIcon} addChannelOption title="Add Channel" />
+      {channels &&
+        channels.docs.map((doc) => (
+          <SidebarOption key={doc.id} id={doc.id} title={doc.data().name} />
+        ))}
     </SidebarContainer>
   );
 }
@@ -58,11 +65,11 @@ const SidebarContainer = styled.div`
   border-top: 1px solid #49274b;
   max-width: 260px;
   margin-top: 60px;
-  
+
   > hr {
-      margin-top: 10px;
-      margin-bottom: 10px;
-      border: 1px solid #49274b;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #49274b;
   }
 `;
 const SidebarHeader = styled.div`
@@ -83,22 +90,22 @@ const SidebarInfo = styled.div`
   flex: 1;
 
   > h2 {
-      font-size: 15px;
-      font-weight: 900;
-      margin-bottom: 5px;
+    font-size: 15px;
+    font-weight: 900;
+    margin-bottom: 5px;
   }
 
   > h3 {
-      display: flex;
-      font-size: 13px;
-      font-weight: 400;
-      align-items: center;
+    display: flex;
+    font-size: 13px;
+    font-weight: 400;
+    align-items: center;
   }
 
   > h3 > .MuiSvgIcon-root {
-      font-size: 14px;
-      margin-top: 1px;
-      margin-right: 2px;
-      color: green;
+    font-size: 14px;
+    margin-top: 1px;
+    margin-right: 2px;
+    color: green;
   }
 `;
