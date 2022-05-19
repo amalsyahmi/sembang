@@ -1,17 +1,27 @@
 import React from "react";
 import "./App.css";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import styled from "styled-components";
+import Header from "./components/Header";
 
 function App() {
   return (
     <div className="App">
       <Router>
-        <Routes>
-          <Route path="/" exact element={<h1>This is the home page</h1>} />
-        </Routes>
+        <Header />
+        <AppBody>
+          <Routes>
+            <Route path="/" exact />
+            {/* Chat */}
+          </Routes>
+        </AppBody>
       </Router>
     </div>
   );
 }
 
 export default App;
+
+const AppBody = styled.div`
+  
+`;
